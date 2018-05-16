@@ -3,104 +3,68 @@ package br.com.ems.avaliacao.rest.itauRest.model;
 import java.time.Instant;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(indexes = { @Index(name = "idx_cpf_cliente", columnList = "cpf") }, uniqueConstraints=@UniqueConstraint(columnNames="cpf"))
 public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Getter @Setter
 	private Integer id;
+	
 	@Column(length = 80)
+	@Getter @Setter
 	private String nome;
+	
 	@Column(length = 11)
+	@Getter @Setter
 	private String cpf;
+	
+	@Getter @Setter
 	private Integer idade;
+	
+	@Getter @Setter
 	private Character sexo;
+	
+	@Getter @Setter
 	private Boolean ativo;
 
-	@OneToMany(mappedBy = "cliente")
+	@OneToMany(cascade=CascadeType.ALL)
+	 @JoinTable(name="cartaoCliente",  
+     joinColumns={@JoinColumn(name="idCliente", 
+      referencedColumnName="id")},  
+     inverseJoinColumns={@JoinColumn(name="idCartao", 
+       referencedColumnName="id")})  
+	@Getter @Setter
 	private List<Cartao> cartoes;
 
-	@OneToMany(mappedBy = "cliente")
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	 @JoinTable(name="servicosCliente",  
+    joinColumns={@JoinColumn(name="idCliente", 
+     referencedColumnName="id")},  
+    inverseJoinColumns={@JoinColumn(name="idServico", 
+      referencedColumnName="id")})  
+	@Getter @Setter
 	private List<Servicos> servicos;
 
-	public Integer getId() {
-		return id;
-	}
-
+	@Getter @Setter
 	private Instant dataCadastro;
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
-	public Integer getIdade() {
-		return idade;
-	}
-
-	public void setIdade(Integer idade) {
-		this.idade = idade;
-	}
-
-	public Character getSexo() {
-		return sexo;
-	}
-
-	public void setSexo(Character sexo) {
-		this.sexo = sexo;
-	}
-
-	public Instant getDataCadastro() {
-		return dataCadastro;
-	}
-
-	public void setDataCadastro(Instant dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
-
-	public List<Cartao> getCartoes() {
-		return cartoes;
-	}
-
-	public void setCartoes(List<Cartao> cartoes) {
-		this.cartoes = cartoes;
-	}
-
-	public Boolean getAtivo() {
-		return ativo;
-	}
-
-	public void setAtivo(Boolean ativo) {
-		this.ativo = ativo;
-	}
-
-	public List<Servicos> getServicos() {
-		return servicos;
-	}
-
-	public void setServicos(List<Servicos> servicos) {
-		this.servicos = servicos;
-	}
-
 }

@@ -13,56 +13,30 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import br.com.ems.avaliacao.rest.itauRest.utils.EnumTipoCartao;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
 public class Cartao {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Getter @Setter
 	private Integer id;
-	@ManyToOne
-	@JoinColumn(name="idCliente")
-	private Cliente cliente;
+	
 	@Enumerated(value = EnumType.STRING)
-	@Column(length=15)
+	@Column(length=30)
+	@Getter @Setter
 	private EnumTipoCartao tipocartao;
+	
 	@Column(length=16)
+	@Getter @Setter
 	private String numCartao;
+	
+	@Getter @Setter
 	private Instant dataAdesao;
+	@Getter @Setter
 	private Boolean ativo;
 	
-	public Cliente getCliente() {
-		return cliente;
-	}
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-	public EnumTipoCartao getTipocartao() {
-		return tipocartao;
-	}
-	public void setTipocartao(EnumTipoCartao tipocartao) {
-		this.tipocartao = tipocartao;
-	}
-	public String getNumCartao() {
-		return numCartao;
-	}
-	public void setNumCartao(String numCartao) {
-		this.numCartao = numCartao;
-	}
-	public Instant getDataAdesao() {
-		return dataAdesao;
-	}
-	public void setDataAdesao(Instant dataAdesao) {
-		this.dataAdesao = dataAdesao;
-	}
-	public Boolean getAtivo() {
-		return ativo;
-	}
-	public void setAtivo(Boolean ativo) {
-		this.ativo = ativo;
-	}
-	public Integer getId() {
-		return id;
-	}
-	
+		
 }
