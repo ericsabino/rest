@@ -28,9 +28,12 @@ public class ItauService {
 	
 	@Transactional
 	public Cliente findByCpf(String cpf) {
-		return clienteRepository.findByCpf("35518281803");
+		return clienteRepository.findByCpf(cpf);
 	}
 	
+	public void updateCliente(Cliente cliente) {
+		clienteRepository.save(cliente);
+	}
 	
 	
 }
