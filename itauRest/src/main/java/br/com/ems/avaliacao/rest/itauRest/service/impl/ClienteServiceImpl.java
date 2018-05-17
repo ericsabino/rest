@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +20,15 @@ import br.com.ems.avaliacao.rest.itauRest.service.ClienteService;
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
+	private static final Logger logger = LogManager.getLogger(ClienteServiceImpl.class);
+
 	@Autowired
 	private ClienteRepository clienteRepository;
 
 	@Transactional
 	@Override
 	public ClienteDTO saveCliente(Cliente cliente) {
+		logger.info("[" + ClienteServiceImpl.class.getName() + "] => INSERINDO CLIENTE NA BASE");
 		ClienteDTO clienteDTO = new ClienteDTO();
 		Cliente save = clienteRepository.save(cliente);
 		BeanUtils.copyProperties(save, clienteDTO);
@@ -33,6 +38,7 @@ public class ClienteServiceImpl implements ClienteService {
 	@Transactional
 	@Override
 	public ClienteDTO findCliente(Integer idCliente) {
+		logger.info("[" + ClienteServiceImpl.class.getName() + "] => CONSULTANDO CLIENTE DE ID: " + idCliente);
 		Optional<Cliente> cliente = clienteRepository.findById(idCliente);
 		ClienteDTO clienteDTO = new ClienteDTO();
 		BeanUtils.copyProperties(cliente.get(), clienteDTO);
@@ -48,22 +54,26 @@ public class ClienteServiceImpl implements ClienteService {
 			BeanUtils.copyProperties(cliente, clienteDTO);
 			return clienteDTO;
 		}
+		logger.error("[" + ClienteServiceImpl.class.getName() + "] => CPF: " + cpf + "NÃO ENCONTRADO");
 		return null;
 	}
 
 	@Transactional
 	@Override
 	public ClienteDTO updateCliente(ClienteDTO clienteDTO) {
-		ClienteDTO findByCpf = findByCpf(clienteDTO.getCpf());
 		Cliente cliente = new Cliente();
-		if (findByCpf != null) {
-			findByCpf.setNome(clienteDTO.getNome());
-			BeanUtils.copyProperties(findByCpf, cliente);
-			Cliente clienteUpdate = clienteRepository.save(cliente);
-			BeanUtils.copyProperties(clienteUpdate, clienteDTO);
-			return clienteDTO;
-		} else {
-			new ResourceNotFoundException("CPF: [" + clienteDTO.getCpf() + "] NÃO ENCONTRADO !!");
+		try {
+			ClienteDTO findByCpf = findByCpf(clienteDTO.getCpf());
+			if (findByCpf != null) {
+				findByCpf.setNome(clienteDTO.getNome());
+				BeanUtils.copyProperties(findByCpf, cliente);
+				Cliente clienteUpdate = clienteRepository.save(cliente);
+				BeanUtils.copyProperties(clienteUpdate, clienteDTO);
+				return clienteDTO;
+			}
+			logger.error("[" + ClienteServiceImpl.class.getName() + "] => CPF: " + clienteDTO.getCpf() + " NÃO EXISTE");
+		} catch (ResourceNotFoundException e) {
+			throw new ResourceNotFoundException("CPF: [" + clienteDTO.getCpf() + "] NÃO ENCONTRADO !!");
 		}
 		return null;
 	}
@@ -71,7 +81,7 @@ public class ClienteServiceImpl implements ClienteService {
 	@Transactional
 	@Override
 	public List<ClienteDTO> findClientesAll() {
-
+		logger.info("[" + ClienteServiceImpl.class.getName() + "] => LISTANDO TODOS CLIENTES DA BASE");
 		List<ClienteDTO> list = new ArrayList<>();
 		clienteRepository.findAll().forEach($ -> {
 			ClienteDTO clienteDTO = new ClienteDTO();
@@ -85,10 +95,15 @@ public class ClienteServiceImpl implements ClienteService {
 	@Override
 	public void deleteCliente(ClienteDTO clienteDTO) {
 		Cliente cliente = new Cliente();
-		ClienteDTO findByCpf = findByCpf(clienteDTO.getCpf());
-		if (findByCpf != null) {
-			BeanUtils.copyProperties(findByCpf, cliente);
-			clienteRepository.delete(cliente);
+		try {
+			ClienteDTO findByCpf = findByCpf(clienteDTO.getCpf());
+			if (findByCpf != null) {
+				BeanUtils.copyProperties(findByCpf, cliente);
+				clienteRepository.delete(cliente);
+			}
+		} catch (Exception e) {
+			logger.error("NÃO FOI POSSÍVEL EXCLUIR O CLIENTE DA BASE");
+			throw new ResourceNotFoundException("NÃO FOI POSSÍVEL EXCLUIR O CLIENTE DA BASE");
 		}
 	}
 

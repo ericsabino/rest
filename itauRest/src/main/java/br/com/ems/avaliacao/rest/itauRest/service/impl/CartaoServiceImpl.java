@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.ems.avaliacao.rest.exception.ResourceNotFoundException;
 import br.com.ems.avaliacao.rest.itauRest.dto.CartaoDTO;
 import br.com.ems.avaliacao.rest.itauRest.model.Cartao;
-import br.com.ems.avaliacao.rest.itauRest.model.Cliente;
 import br.com.ems.avaliacao.rest.itauRest.repository.CartaoRepository;
 import br.com.ems.avaliacao.rest.itauRest.service.CartaoService;
 
@@ -32,11 +31,6 @@ public class CartaoServiceImpl implements CartaoService {
 		Optional<Cartao> Cartao = CartaoRepository.findById(idCartao);
 		return Cartao.get();
 	}
-
-//	@Transactional
-//	public Cartao findByCartaoByCliente(Cliente cliente) {
-//		return CartaoRepository.findCartaoByCliente(cliente);
-//	}
 
 	@Transactional
 	public CartaoDTO updateCartao(CartaoDTO cartaoDTO) {
