@@ -22,27 +22,43 @@ public class ClienteServiceImpl implements ClienteService {
 	private ClienteRepository clienteRepository;
 
 	@Transactional
-	public Cliente saveCliente(Cliente cliente) {
-		return clienteRepository.save(cliente);
+	@Override
+	public ClienteDTO saveCliente(Cliente cliente) {
+		ClienteDTO clienteDTO = new ClienteDTO();
+		Cliente save = clienteRepository.save(cliente);
+		BeanUtils.copyProperties(save, clienteDTO);
+		return clienteDTO;
 	}
 
 	@Transactional
-	public Cliente findCliente(Integer idCliente) {
+	@Override
+	public ClienteDTO findCliente(Integer idCliente) {
 		Optional<Cliente> cliente = clienteRepository.findById(idCliente);
-		return cliente.get();
+		ClienteDTO clienteDTO = new ClienteDTO();
+		BeanUtils.copyProperties(cliente.get(), clienteDTO);
+		return clienteDTO;
 	}
 
 	@Transactional
-	public Cliente findByCpf(String cpf) {
-		return clienteRepository.findByCpf(cpf);
-	}
-
-	@Transactional
-	public ClienteDTO updateCliente(ClienteDTO clienteDTO) {
-
-		Cliente cliente = findByCpf(clienteDTO.getCpf());
+	@Override
+	public ClienteDTO findByCpf(String cpf) {
+		Cliente cliente = clienteRepository.findByCpf(cpf);
 		if (cliente != null) {
-			cliente.setNome(clienteDTO.getNome());
+			ClienteDTO clienteDTO = new ClienteDTO();
+			BeanUtils.copyProperties(cliente, clienteDTO);
+			return clienteDTO;
+		}
+		return null;
+	}
+
+	@Transactional
+	@Override
+	public ClienteDTO updateCliente(ClienteDTO clienteDTO) {
+		ClienteDTO findByCpf = findByCpf(clienteDTO.getCpf());
+		Cliente cliente = new Cliente();
+		if (findByCpf != null) {
+			findByCpf.setNome(clienteDTO.getNome());
+			BeanUtils.copyProperties(findByCpf, cliente);
 			Cliente clienteUpdate = clienteRepository.save(cliente);
 			BeanUtils.copyProperties(clienteUpdate, clienteDTO);
 			return clienteDTO;
@@ -53,6 +69,7 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 
 	@Transactional
+	@Override
 	public List<ClienteDTO> findClientesAll() {
 
 		List<ClienteDTO> list = new ArrayList<>();
@@ -62,6 +79,17 @@ public class ClienteServiceImpl implements ClienteService {
 			list.add(clienteDTO);
 		});
 		return list;
+	}
+
+	@Transactional
+	@Override
+	public void deleteCliente(ClienteDTO clienteDTO) {
+		Cliente cliente = new Cliente();
+		ClienteDTO findByCpf = findByCpf(clienteDTO.getCpf());
+		if (findByCpf != null) {
+			BeanUtils.copyProperties(findByCpf, cliente);
+			clienteRepository.delete(cliente);
+		}
 	}
 
 }

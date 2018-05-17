@@ -6,10 +6,11 @@ import br.com.ems.avaliacao.rest.itauRest.dto.ClienteDTO;
 import br.com.ems.avaliacao.rest.itauRest.model.Cliente;
 
 public interface ClienteService {
-	public Cliente saveCliente(Cliente cliente);
-	public Cliente findCliente(Integer idCliente);
-	public Cliente findByCpf(String cpf);
-	public ClienteDTO updateCliente(ClienteDTO cliente);
+	public ClienteDTO saveCliente(Cliente cliente);
+	public ClienteDTO findCliente(Integer idCliente);
+	public ClienteDTO findByCpf(String cpf);
+	public ClienteDTO updateCliente(ClienteDTO clienteDTO);
 	public List<ClienteDTO> findClientesAll();
+	public void deleteCliente(ClienteDTO clienteDTO);
 	
 }

@@ -1,6 +1,7 @@
 package br.com.ems.avaliacao.rest.itauRest.dto;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ public class ClienteDTO {
 	private Integer id;
 	private String nome;
 	private String cpf;
-	private Integer idade;
+	private LocalDate dataNascimento;
 	private Character sexo;
 	private Boolean ativo;
 	private List<CartaoDTO> cartoes;
@@ -28,4 +29,9 @@ public class ClienteDTO {
 		this.cpf = cpf;
 	}
 
+	public ClienteDTO(String cpf) {
+		super();
+		this.cpf = cpf;
+	}
+	
 }

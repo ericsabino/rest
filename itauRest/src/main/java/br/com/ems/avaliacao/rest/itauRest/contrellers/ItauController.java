@@ -33,21 +33,26 @@ public class ItauController {
 	}
 
 	@PostMapping(value = "add", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Cliente> addCliente(@RequestBody Cliente cliente) {
-		Cliente saveCliente = clienteService.saveCliente(cliente);
-		return new ResponseEntity<Cliente>(saveCliente, HttpStatus.OK);
+	public ResponseEntity<ClienteDTO> addCliente(@RequestBody Cliente cliente) {
+		ClienteDTO saveCliente = clienteService.saveCliente(cliente);
+		return new ResponseEntity<ClienteDTO>(saveCliente, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "update/{cpf}", method = { RequestMethod.PUT, RequestMethod.PATCH},
-		    produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-		    public ResponseEntity<ClienteDTO> updateSurvivor(
-		            @PathVariable("cpf") String cpf,
-		            @RequestParam("nome") String nome) {
 
-		        ClienteDTO clienteDTO = new ClienteDTO(nome,cpf);
-		        
-		         clienteService.updateCliente(clienteDTO);
-		        return new ResponseEntity<ClienteDTO>(clienteDTO, HttpStatus.OK);
-		    }
+	@RequestMapping(value = "update/{cpf}", method = { RequestMethod.PUT, RequestMethod.PATCH }, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<ClienteDTO> updateCliente(@PathVariable("cpf") String cpf,
+			@RequestParam("nome") String nome) {
+
+		ClienteDTO clienteDTO = new ClienteDTO(nome, cpf);
+
+		clienteService.updateCliente(clienteDTO);
+		return new ResponseEntity<ClienteDTO>(clienteDTO, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "delete/{cpf}", method = { RequestMethod.DELETE},
+			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public void deleteCliente(@PathVariable("cpf") String cpf) {
+		ClienteDTO clienteDTO = new ClienteDTO(cpf);
+		clienteService.deleteCliente(clienteDTO);
+	}
 
 }

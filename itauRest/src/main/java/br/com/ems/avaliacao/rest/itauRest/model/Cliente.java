@@ -1,11 +1,13 @@
 package br.com.ems.avaliacao.rest.itauRest.model;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +17,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.Cascade;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +40,7 @@ public class Cliente {
 	private String cpf;
 	
 	@Getter @Setter
-	private Integer idade;
+	private LocalDate dataNascimento;
 	
 	@Getter @Setter
 	private Character sexo;
@@ -59,7 +63,7 @@ public class Cliente {
     joinColumns={@JoinColumn(name="idCliente", 
      referencedColumnName="id")},  
     inverseJoinColumns={@JoinColumn(name="idServico", 
-      referencedColumnName="id")})  
+      referencedColumnName="id")})
 	@Getter @Setter
 	private List<Servicos> servicos;
 
