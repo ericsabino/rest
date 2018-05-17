@@ -3,6 +3,7 @@ package br.com.ems.avaliacao.rest.itauRest;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -26,11 +27,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.google.gson.Gson;
-
 import br.com.ems.avaliacao.rest.itauRest.dto.CartaoDTO;
 import br.com.ems.avaliacao.rest.itauRest.dto.ClienteDTO;
 import br.com.ems.avaliacao.rest.itauRest.dto.ServicosDTO;
+import br.com.ems.avaliacao.rest.itauRest.model.Cartao;
+import br.com.ems.avaliacao.rest.itauRest.model.Cliente;
+import br.com.ems.avaliacao.rest.itauRest.repository.CartaoRepository;
 import br.com.ems.avaliacao.rest.itauRest.repository.ClienteRepository;
 import br.com.ems.avaliacao.rest.itauRest.utils.EnumProduto;
 import br.com.ems.avaliacao.rest.itauRest.utils.EnumTipoCartao;
@@ -48,8 +50,9 @@ public class ItauRestApplicationTests {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
-
-	private Gson gson;
+	
+	@Autowired
+	private CartaoRepository cartaoRepository;
 
 	@Autowired
 	public void setConverters(HttpMessageConverter<?>[] converters) {
@@ -70,7 +73,7 @@ public class ItauRestApplicationTests {
 				.andExpect(status().isOk());
 	}
 
-	@Test
+//	@Test
 	public void testAddCliente() throws Exception {
 		CartaoDTO cartaoDTO1 = new CartaoDTO(1, EnumTipoCartao.CREDITO, "9999888877776666", Instant.now(), true);
 		CartaoDTO cartaoDTO2 = new CartaoDTO(2, EnumTipoCartao.CREDITO, "1111222244443333", Instant.now(), true);
@@ -88,19 +91,19 @@ public class ItauRestApplicationTests {
 		 			
 	}
 	
-	/*@Test
+	@Test
     public void testUpdateCliente() throws Exception {
-        Cliente DarylUpdated = new Cliente();
-//        1L, "Daryl Dixon", 30, "Male",
-//                new BigInteger("1234567890"), new BigInteger("0987654321"), false,
-//                Arrays.asList(new ItemDTO(EnumItem.AMMUNITION), new ItemDTO(EnumItem.FOOD)));
+        ClienteDTO clienteUpdated = new ClienteDTO("ERIC SABINO", "12312312399");
+        Cartao cartao = new Cartao();
+        
+//        new ClienteDTO(1, "ERIC SABINO", "12312312399", 50, 'M', true, , servicos, Instant.)
 
-        this.mockMvc.perform(put("/api/itau/update/1")
-                .param("latitude", "1234567890")
-                .param("longitude", "0987654321"))
+        String cpf = "12312312399";
+		this.mockMvc.perform(put("/api/itau/update/" + cpf )
+                .param("nome", "ERIC SABINO"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(content().json(this.json(DarylUpdated)));
-    }*/
+                .andExpect(content().json(this.json(clienteUpdated)));
+    }
 	
 	protected String json(Object o) throws IOException {
 		MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();

@@ -16,9 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -33,7 +31,7 @@ public class Cliente {
 	@Getter @Setter
 	private String nome;
 	
-	@Column(length = 11)
+	@Column(name="cpf",length = 15)
 	@Getter @Setter
 	private String cpf;
 	

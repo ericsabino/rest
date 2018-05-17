@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.ems.avaliacao.rest.exception.ResourceNotFoundException;
 import br.com.ems.avaliacao.rest.itauRest.dto.ClienteDTO;
 import br.com.ems.avaliacao.rest.itauRest.model.Cliente;
 import br.com.ems.avaliacao.rest.itauRest.repository.ClienteRepository;
@@ -37,8 +38,18 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 
 	@Transactional
-	public void updateCliente(Cliente cliente) {
-		clienteRepository.save(cliente);
+	public ClienteDTO updateCliente(ClienteDTO clienteDTO) {
+
+		Cliente cliente = findByCpf(clienteDTO.getCpf());
+		if (cliente != null) {
+			cliente.setNome(clienteDTO.getNome());
+			Cliente clienteUpdate = clienteRepository.save(cliente);
+			BeanUtils.copyProperties(clienteUpdate, clienteDTO);
+			return clienteDTO;
+		} else {
+			new ResourceNotFoundException("CPF: [" + clienteDTO.getCpf() + "] NÃO ENCONTRADO !!");
+		}
+		return null;
 	}
 
 	@Transactional

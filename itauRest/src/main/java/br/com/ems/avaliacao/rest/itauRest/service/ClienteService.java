@@ -9,7 +9,7 @@ public interface ClienteService {
 	public Cliente saveCliente(Cliente cliente);
 	public Cliente findCliente(Integer idCliente);
 	public Cliente findByCpf(String cpf);
-	public void updateCliente(Cliente cliente);
+	public ClienteDTO updateCliente(ClienteDTO cliente);
 	public List<ClienteDTO> findClientesAll();
 	
 }

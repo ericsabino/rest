@@ -7,9 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ems.avaliacao.rest.itauRest.dto.ClienteDTO;
@@ -35,18 +38,16 @@ public class ItauController {
 		return new ResponseEntity<Cliente>(saveCliente, HttpStatus.OK);
 	}
 	
-/*	@RequestMapping(value = "update/{idCliente}", method = { RequestMethod.PUT, RequestMethod.PATCH},
+	@RequestMapping(value = "update/{cpf}", method = { RequestMethod.PUT, RequestMethod.PATCH},
 		    produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-		    public ResponseEntity<Cliente> updateSurvivor(
-		            @PathVariable("idCliente") Integer idCliente,
+		    public ResponseEntity<ClienteDTO> updateSurvivor(
+		            @PathVariable("cpf") String cpf,
 		            @RequestParam("nome") String nome) {
 
-		        ClienteDTO survivorDTO = new ClienteDTO(survivorId,
-		                            new BigInteger(latitude),
-		                            new BigInteger(longitude)
-		                            );
-		         survivorService.updateLocation(survivorDTO);
-		        return new ResponseEntity<SurvivorDTO>(survivorDTO, HttpStatus.OK);
+		        ClienteDTO clienteDTO = new ClienteDTO(nome,cpf);
+		        
+		         clienteService.updateCliente(clienteDTO);
+		        return new ResponseEntity<ClienteDTO>(clienteDTO, HttpStatus.OK);
 		    }
-*/
+
 }

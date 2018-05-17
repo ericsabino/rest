@@ -29,7 +29,7 @@ public class Cartao {
 	@Getter @Setter
 	private EnumTipoCartao tipocartao;
 	
-	@Column(length=16)
+	@Column(name="numCartao", length=16)
 	@Getter @Setter
 	private String numCartao;
 	
